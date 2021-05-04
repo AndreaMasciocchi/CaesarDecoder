@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Caesar</title>
+</head>
+
+<body>
+	<input type="text" id="enc" onkeyup="decrypt()">
+	<input type="button" onclick="decrypt()" value="=">
+	<input type="button" onclick="location.reload()" value="Reload Page"><br>
+	<input type="radio" name="bruteBool" id="yesBrute">
+	<label for="yesBrute">Brute Force</label><br>
+	<input type="radio" name="bruteBool" id="noBrute">
+	<label for="noBrute">No Brute Force</label>
+	<p id="noBruteForceResult"></p>
+	<input type="button" id="notRight" value="Non è corretto?" style="display:none" onclick="letterWrong()"><br>
+	<div id="bruteForceResult"></div>
+</body>
+
+<script>
+
+	var letter = 101;
+	
+
+	function decrypt(){
+		if(document.getElementById("yesBrute").checked){
+			printTableBrute();
+		}else if(document.getElementById("noBrute").checked){
+			printResultNoBrute();
+		}
+	}
+
+	function printResultNoBrute(){
+        var numShift = findMost(document.getElementById("enc").value) - letter;
+        console.log(numShift);
+        document.getElementById("noBruteForceResult").innerHTML = shift(document.getElementById("enc").value, -(numShift));
+		document.getElementById("notRight").style.display = "block";
+    }
+
+	function printTableBrute(){
+		var row;
+		var cell;
+		var tabella;
+		var text = document.createTextNode("");
+
+		tabella = document.createElement("table");
+		tabella.setAttribute("id", "tab");
+		tabella.style.borderCollapse = "collapse";
+		var element = document.getElementById("bruteForceResult");
+		for(var i = 0; i<26; i++){
+			row = tabella.insertRow();
+
+			cell = row.insertCell();
+			cell.style.border = "2px solid black";
+			cell.innerHTML = i;
+			text = document.createTextNode("");
+			cell.appendChild(text);
+
+			cell = row.insertCell();
+			cell.style.border = "2px solid black";
+			cell.innerHTML = shift(document.getElementById("enc").value, i);
+			text = document.createTextNode("");
+			cell.appendChild(text);
+
+			element.appendChild(tabella);
+		}
+	}
+
+	function findMost(st){
+        var quantity = new Array(26);
+        quantity.fill(0);
+        for(x in st){
+			if((st[x].charCodeAt(0)>=65&&st[x].charCodeAt(0)<=90)||(st[x].charCodeAt(0)>=97&&st[x].charCodeAt(0)<=122)){
+				quantity[st[x].charCodeAt(0) - 97] += 1;
+            	console.log(st[x].charCodeAt(0) - 97);
+			}
+        }
+        console.log(quantity.toString());
+        console.log(quantity.indexOf(Math.max.apply(null, quantity)));
+        return quantity.indexOf(Math.max.apply(null, quantity)) + 97;
+
+    }
+
+	function shift(str, amount) {
+	  	if (amount < 0) {
+	    	return shift(str, amount + 26);
+	  	}
+	  	var output = "";
+	  	for (var i = 0; i < str.length; i++) {
+	    	var c = str[i];
+	    	if (c.match(/[a-z]/i)) {
+	      		var code = str.charCodeAt(i);
+	      		if (code >= 65 && code <= 90) {
+	        		c = String.fromCharCode(((code - 65 + amount) % 26) + 65);
+				}else if (code >= 97 && code <= 122) {
+					c = String.fromCharCode(((code - 97 + amount) % 26) + 97);
+				}
+			}
+			output += c;
+		}
+		return output;
+	}
+
+	function letterWrong(){
+		var times;
+		if(times === null){
+			times = 0;
+		}
+		switch(times){
+			case 0:
+				letter = 97;
+				break;
+			case 1:
+				letter = 105;
+				break;
+			case 2:
+				letter = 111;
+				break;
+			case 3:
+				letter = 110;
+				break;
+			case 4:
+				letter = 108;
+				break;
+			case 5:
+				letter = 114;
+				break;
+			case 6:
+				letter = 116;
+				break;
+			case 7:
+				letter = 115;
+				break;
+			case 8:
+				letter = 99;
+				break;
+			case 9:
+				letter = 100;
+				break;
+			case 10:
+				letter = 112;
+				break;
+			case 11:
+				letter = 117;
+				break;
+			case 12:
+				letter = 109;
+				break;
+			case 13:
+				letter = 118;
+				break;
+			case 14:
+				letter = 103;
+				break;
+			case 15:
+				letter = 104;
+				break;
+			case 16:
+				letter = 102;
+				break;
+			case 17:
+				letter = 98;
+				break;
+			case 18:
+				letter = 113;
+				break;
+			case 19:
+				letter = 122;
+				break;
+		}
+		times += 1;
+		if(times > 19){
+			times = 0;
+		}
+		decrypt();
+	}
+</script>
+</html>
